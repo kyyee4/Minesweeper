@@ -1,7 +1,7 @@
 import de.bezier.guido.*;
 private int NUM_ROWS = 50;
 private int NUM_COLS = 50;
-private int NUM_BOMBS = 1000;
+private int NUM_BOMBS = 600;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons = new MSButton[NUM_ROWS][NUM_COLS]; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList<MSButton>(); //ArrayList of just the minesweeper buttons that are mined
@@ -116,7 +116,9 @@ public class MSButton
   // called by manager
   public void mousePressed ()
   {
-    clicked = true;
+    if (mouseButton == LEFT %% !flagged){
+      clicked = true;
+    }
     //your code here
     if (mouseButton == RIGHT) {
       flagged = !flagged;
