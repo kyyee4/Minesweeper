@@ -1,7 +1,7 @@
 import de.bezier.guido.*;
 private int NUM_ROWS = 20;
 private int NUM_COLS = 20;
-private int NUM_BOMBS = 20;
+private int NUM_BOMBS = 10;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons = new MSButton[NUM_ROWS][NUM_COLS]; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList<MSButton>(); //ArrayList of just the minesweeper buttons that are mined
@@ -31,9 +31,8 @@ public void setMines()
   for (int i = 0; i<NUM_BOMBS; i++) {
     int randomR = (int)(Math.random() * NUM_ROWS);
     int randomC = (int)(Math.random() * NUM_COLS);
-    if (!mines.contains(buttons[randomR][randomC])) {
+    if (mines.contains(buttons[randomR][randomC]) == false) {
       mines.add(buttons[randomR][randomC]);
-      System.out.println(randomR+","+randomC);
     }
   }
 }
@@ -46,17 +45,30 @@ public void draw ()
 }
 public boolean isWon()
 {
-  //your code here
+  int temp = 0;
+  for (int r = 0; r<NUM_ROWS; r++) {
+    for (int c = 0; c<NUM_COLS; c++) {
+      if (mines.contains(buttons[r][c]) && buttons[r][c].flagged) {
+        temp++;
+      }
+    }
+  }
+  if (temp == NUM_BOMBS) {
+    return true;
+  }
   return false;
 }
 public void displayLosingMessage()
 {
   //your code here
-  System.out.println("you suck");
+  for (int r = 0; r<NUM_ROWS; r++) {
+    for (int c = 0; c<NUM_COLS; c++) {
+      buttons[r][c].clicked = true;
+    }
+  }
 }
 public void displayWinningMessage()
 {
-  //your code here
 }
 public boolean isValid(int r, int c)
 {
@@ -123,34 +135,34 @@ public class MSButton
       }
     }
   }
-        public void draw ()
-        {
-          if (flagged)
-            fill(0);
-          else if ( clicked && mines.contains(this) )
-            fill(255, 0, 0);
-          else if (clicked)
-            fill( 200 );
-          else
-            fill( 100 );
+  public void draw ()
+  {
+    if (flagged)
+      fill(0);
+    else if ( clicked && mines.contains(this) )
+      fill(255, 0, 0);
+    else if (clicked)
+      fill( 200 );
+    else
+      fill( 100 );
 
-          rect(x, y, width, height);
-          fill(0);
-          text(myLabel, x+width/2, y+height/2);
-        }
-        public void setLabel(String newLabel)
-        {
-          myLabel = newLabel;
-        }
-        public void setLabel(int newLabel)
-        {
-          myLabel = ""+ newLabel;
-        }
-        public boolean isFlagged()
-        {
-          return flagged;
-        }
-      }
+    rect(x, y, width, height);
+    fill(0);
+    text(myLabel, x+width/2, y+height/2);
+  }
+  public void setLabel(String newLabel)
+  {
+    myLabel = newLabel;
+  }
+  public void setLabel(int newLabel)
+  {
+    myLabel = ""+ newLabel;
+  }
+  public boolean isFlagged()
+  {
+    return flagged;
+  }
+}
 
 
 
