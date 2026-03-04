@@ -1,14 +1,16 @@
 import de.bezier.guido.*;
-private int NUM_ROWS = 50;
-private int NUM_COLS = 50;
-private int NUM_BOMBS = 600;
+private int NUM_ROWS = 20;
+private int NUM_COLS = 20;
+private int NUM_BOMBS = 20;
+private boolean isWin;
+private boolean isLost;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
 private MSButton[][] buttons = new MSButton[NUM_ROWS][NUM_COLS]; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList<MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 
 void setup ()
 {
-  size(800, 800);
+  size(400, 400);
   textAlign(CENTER, CENTER);
 
   // make the manager
@@ -41,7 +43,7 @@ public void draw ()
 {
   background( 0 );
   if (isWon() == true)
-    displayWinningMessage();
+  displayWinningMessage();
 }
 public boolean isWon()
 {
@@ -61,6 +63,15 @@ public boolean isWon()
 public void displayLosingMessage()
 {
   //your code here
+  isLost = true;
+  buttons[5][5].setLabel("Y");
+  buttons[5][6].setLabel("O");
+  buttons[5][7].setLabel("U");
+  buttons[5][9].setLabel("L");
+  buttons[5][10].setLabel("O");
+  buttons[5][11].setLabel("S");
+  buttons[5][12].setLabel("T");
+
   for (int r = 0; r<NUM_ROWS; r++) {
     for (int c = 0; c<NUM_COLS; c++) {
       buttons[r][c].clicked = true;
@@ -69,6 +80,13 @@ public void displayLosingMessage()
 }
 public void displayWinningMessage()
 {
+      isWin = true;
+  buttons[5][5].setLabel("Y");
+  buttons[5][6].setLabel("O");
+  buttons[5][7].setLabel("U");
+  buttons[5][9].setLabel("W");
+  buttons[5][10].setLabel("I");
+  buttons[5][11].setLabel("N");
 }
 public boolean isValid(int r, int c)
 {
@@ -102,8 +120,8 @@ public class MSButton
 
   public MSButton ( int row, int col )
   {
-    width = 800/NUM_COLS;
-    height = 800/NUM_ROWS;
+    width = 400/NUM_COLS;
+    height = 400/NUM_ROWS;
     myRow = row;
     myCol = col;
     x = myCol*width;
@@ -116,21 +134,28 @@ public class MSButton
   // called by manager
   public void mousePressed ()
   {
-    if (mouseButton == LEFT && flagged == false){
+    if (isWin == true){
+      return;
+    }
+    if(isLost == true){
+    return;
+  }
+    if (isFlagged() == false) {
       clicked = true;
     }
     //your code here
     if (mouseButton == RIGHT) {
       flagged = !flagged;
       clicked = false;
-    } else if (mines.contains(this)) {
+      
+    } else if (mines.contains(this) && isFlagged() == false) {
       displayLosingMessage();
-    } else if (countMines(myRow, myCol)>0) {
+    } else if (countMines(myRow, myCol)>0 && clicked == true) {
       setLabel(countMines(myRow, myCol));
     } else {
       for (int r = myRow - 1; r <= myRow + 1; r++) {
         for (int c = myCol - 1; c <= myCol + 1; c++) {
-          if (isValid(r, c) && !buttons[r][c].clicked) {
+          if (isValid(r, c) && !buttons[r][c].clicked && isFlagged()==false) {
             buttons[r][c].mousePressed();
           }
         }
