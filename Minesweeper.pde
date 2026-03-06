@@ -1,7 +1,7 @@
 import de.bezier.guido.*;
 private int NUM_ROWS = 20;
 private int NUM_COLS = 20;
-private int NUM_BOMBS = 20;
+private int NUM_BOMBS = 50;
 private boolean isWin;
 private boolean isLost;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
